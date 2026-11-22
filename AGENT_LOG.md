@@ -12,6 +12,7 @@ and — most importantly — what has **not** been verified.
 | Was a **MuJoCo** success rate measured? | **Yes, by the user, on MuJoCo 4.0.1** (section 4b): 98.5 % (1084/1100, 95 % CI 97.7-99.1) at nominal noise, 98.5 % with no noise, 73.5 % at 3x noise. I could not run MuJoCo in my workspace; I recomputed the figures from the per-seed files the user sent. |
 | What did I verify myself? | Pipeline logic, harness, determinism and scoring on an idealised **mock backend** (section 4), and the analysis of the user's per-seed data. Mock rates say nothing about contact physics. |
 | Main finding | At nominal noise the failures follow cube mass (all 19 are cubes above ~72 g), not perception error. The held-cube trace shows why they fail: heavy cubes sag 4-10 mm in the grasp, the controller assumes no sag, and the cube meets the table about 3 mm early, right at the 3 mm settle tolerance. |
+| Guarded-place variant | Run by the user on MuJoCo 4.0.1 (seeds 100-1099): **996/1000 = 99.6 %** (CI 99.0-99.8) vs the default's 985/1000 on the same seeds; fixed 11 of 15 failures, broke none; 4 remain: cubes that drop out of the jaws at the start of the place descent (correctly reported as failures). A separate, opt-in configuration, not a replacement. See section 4b. |
 | Still open | **Why heavy cubes slip** despite a measured 7-8 N per pad (about 20x the friction needed): contact-solver creep is the leading candidate and is untested. Also MuJoCo 3.x reproduction and low-friction grasps (friction is effectively inert in this eval). See section 5. |
 
 ## 1. Environment findings (checked, not assumed)
@@ -133,7 +134,8 @@ error statistics, which come from exact geometry rather than from a model of con
 Provenance. The user ran these on their own machine and sent me the four `summary.json` and
 four `results.jsonl` files (copied to `runs/mujoco_*`). I recomputed every summary figure
 from the raw per-seed rows and they match. I did not observe the runs. Also as reported by
-the user in chat: the smoke test passed (I have not seen its output); no files were edited
+the user in chat: the smoke test passed (the output was later pasted and I have now seen it,
+saved as `runs/mujoco_smoke_test.txt`); no files were edited
 before the first run; Python 3.12 virtualenv, `pip install -r requirements.txt`; MuJoCo
 **4.0.1**. The first zip's `requirements.txt` said `mujoco>=3.1` with no upper bound (the
 `<4` pin came later), so pip took the newest release. The code was written against the 3.x
@@ -300,7 +302,7 @@ Limits of all of the above: one cube, success tolerances I chose (2 cm / 10 deg 
 gantry arm with no IK, camera never occluded by the arm, noise models not calibrated to a
 sensor, friction effectively fixed (point 4).
 
-### Experimental variant: guarded place (no MuJoCo result yet)
+### Experimental variant: guarded place (MuJoCo 4.0.1 result below)
 
 `--guarded-place` (in `eval.py` and `diagnose_seed.py`) selects the controller variant above.
 It targets the failure in point 5b: a heavy cube that sags in the grasp stops the TCP about
@@ -319,11 +321,52 @@ re-check) each made a test fail. The stub is not a contact model, so none of thi
 the mode behaves on the engine. One side effect: in default mode a cube that dropped out of
 the jaws during `place_descend` without stalling the TCP is not detected before release.
 
+**Result (run by the user on MuJoCo 4.0.1, seeds 100-1099, nominal noise; files in
+`runs/mujoco_guarded_seeds100-1099/`; I recomputed the figures from `results.jsonl`).**
+
+| configuration | seeds | success | Wilson 95 % | failures |
+|---|---|---|---|---|
+| default (`guarded_place=False`) | 100-1099 | 985/1000 = 98.5 % | 97.5-99.1 % | 15 x `timeout:place_descend` |
+| **guarded** (`--guarded-place`) | 100-1099 | **996/1000 = 99.6 %** | 99.0-99.8 % | 4 x `timeout:place_descend` |
+
+On identical seeds the guard fixed 11 of the 15 default failures (106, 353, 367, 395, 406,
+477, 569, 793, 801, 1030, 1080) and broke none. Success is still judged on ground truth
+(cube within 2 cm, tilt <= 10 deg, height within 5 mm), so those 11 are real placements,
+not relaxed scoring; what changed is that the controller no longer aborts when the TCP
+stalls a few mm high. Caveats: the improvement is on the same 1,000 scenarios the default
+was diagnosed on, so it is a fit to a known failure mode, not an independent test; the
+run does not record how often the guard fired; nothing here says the cubes no longer sag.
+
+**Still failing under the guard: seeds 159, 166, 458, 844 (diagnosed from the user's trace,
+`runs/mujoco_diagnose_trace_v3_guarded_remaining4.txt`).** These are not stalls. In all four
+the cube leaves the jaws at the start of `place_descend`: in the settle samples the cube is
+held (z 133-143 mm, sagged 7-10 mm below the TCP) one sample, then 0.3 s later it is on
+the table at z about 15-17 mm while the TCP is still at 130 mm (seed 166 is caught
+mid-fall at 97 mm). The jaws then descend onto the dropped cube and stop with the TCP about
+19 mm above the target, outside `stall_max` (12 mm), with 49-59 N on the table and a
+jaw width of 0.6-5 mm. So the guard is behaving as designed, and the abort is correct:
+`stall_max` should not be raised to accept these. Sag was already growing before the drop
+(seed 844: 1.4 mm after lift, 16.7 mm after transit). Seeds 159, 458 and 844 happen to end
+within the 2 cm / 10 deg / 5 mm tolerances (xy error 7.8-14.3 mm, tilt 3-6 deg, z error 3.7-3.8 mm),
+so a controller that ignored the abort would have scored a dropped cube as a success; this
+is why the eval counts an abort as a failure. Seed 166 ends 19 mm off with a 79 deg tilt.
+Consequence for an earlier statement: the "14 of 19 aborts where the cube was physically
+at the target" figure includes drops like these, so it overstates how many aborts were
+harmless stalls; I have not re-split it. What is still unknown is why the grip lets go (see
+section 5): the slow growth in sag at constant 7 N per pad looks like contact creep, but the
+trace does not prove it.
+
+Not yet run with the guard: the 3x-noise seeds (default 147/200) and the noiseless seeds.
+
 ## 5. Status of the earlier unverified items, and what is still open
 
-Resolved by the user's runs (smoke test reported as passing, plus about 1,700 MuJoCo
+Resolved by the user's runs (smoke test output seen and all nine checks pass, plus about 1,700 MuJoCo
 episodes): the MJCF compiles; the `mj_ray` depth path and the runtime camera-consistency
-assert work; mock depth agrees with MuJoCo depth (smoke check 6, as reported by the user);
+assert work; mock depth agrees with MuJoCo depth (smoke check 6: max difference 0.114 mm); the cube
+settles at its half-height with no tilt; the TCP tracks a command to 0.00 mm; rayed depth at
+the cube top is 0.6108 m against 0.6107 m expected; a squeezed cube lifts with the jaws
+(jaw width 33.6 mm on a 35.2 mm cube, so the pads sink about 0.8 mm each, matching the
+soft-contact reading in point 5b); the same seed gives an identical result in-process;
 the arm tracks well enough for 98.5 % success; wall-clock cost is about 60 ms per episode;
 determinism holds in-process and, for six seeds, across processes on the same machine;
 the grip-force readout (`MuJoCoBackend.grip_forces`) runs on the engine and passes sanity checks
@@ -340,15 +383,13 @@ Still open:
   (3) re-run the hang test with MuJoCo's `noslip_iterations` option set, the standard
   setting for reducing contact creep.
 - **MuJoCo 3.x reproduction.** Every run used 4.0.1.
-- **The smoke-test output**, which I have not seen.
 - **Determinism across machines and library versions.**
 - **Low-friction grasps**, effectively untested (point 4).
 - **Controller tuning.** Gains were never tuned on the engine. The place height ignores
   in-hand slip, and the 3 mm / 1.5 s settle criterion is exactly what the failing episodes
-  tripped. The guarded-place variant has not been run on MuJoCo; suggested comparison on
-  the same seeds: `python -m pickplace.eval --backend mujoco --seeds 100:1100 --guarded-place
-  --out runs/mujoco_guarded_seeds100-1099` (default run: 985/1000) and the same with
-  `--seeds 0:200 --noise-scale 3` (default: 147/200).
+  tripped. The guarded-place variant was run on seeds 100-1099 (996/1000 vs 985/1000, section 4b);
+  four failures remain (seeds 159, 166, 458, 844): the cube drops out of the jaws, which is the grip problem again, not a controller-tolerance one, and it has not been run at 3x
+  noise (`--seeds 0:200 --noise-scale 3 --guarded-place`; default 147/200).
 
 ## 6. Known limitations of the design (independent of MuJoCo)
 
@@ -372,7 +413,7 @@ Still open:
 - `runs/mujoco_nominal_seeds0-99/`, `runs/mujoco_nominal_seeds100-1099/`,
   `runs/mujoco_noiseless_seeds0-199/`, `runs/mujoco_3x_seeds0-199/`: MuJoCo 4.0.1 runs by the
   user (`summary.json` + `results.jsonl`), copied unmodified.
-- `scripts/smoke_mujoco.py`: engine checks (reported as passing by the user).
+- `scripts/smoke_mujoco.py`: engine checks; output in `runs/mujoco_smoke_test.txt` (all nine pass on MuJoCo 4.0.1).
 - `scripts/diagnose_seed.py`: per-phase trace of the held cube for chosen seeds. The user ran the
   first version on MuJoCo (`runs/mujoco_diagnose_trace_v1.txt`) and the version with the force
   readout (`runs/mujoco_diagnose_trace_v2_forces.txt`).
