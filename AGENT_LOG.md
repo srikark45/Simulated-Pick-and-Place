@@ -1,6 +1,6 @@
 # Agent log
 
-Written by the coding agent (Claude, Sonnet 5.5) that built this project, 2026-11-21.
+Written by the coding agent (Claude, Sonnet 5.5) that built this project.
 Purpose: say what was built, how each part was checked, what went wrong along the way,
 and — most importantly — what has **not** been verified.
 
