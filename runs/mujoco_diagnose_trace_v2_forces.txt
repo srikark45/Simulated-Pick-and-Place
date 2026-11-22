@@ -1,0 +1,100 @@
+(pickplace-venv) (base) srikar@MacBook-Pro-37 PickPlace Simulator % python scripts/diagnose_seed.py --backend mujoco --seeds 46,38,106,166,5,6 --noise-scale 1
+
+=== seed 46  FAIL  control:tracking_timeout:place_descend
+    mass 76.7 g  mu 0.65  size 41.2 mm  perc_xy_err 2.7 mm
+    phase                        dz(mm)   width   tcp_err x / y / z (mm)    yaw_err(deg)   forces on cube (normal, N) / cube tilt (deg)
+    approach                    -129.56   71.01    -0.31   0.40   0.06      -0.01   pad  0.00/ 0.00 N  act  0.05/ 0.05 N  table  0.75 N  tilt   0.0
+    descend                       -0.04   71.01    -0.00   0.00   0.04      -0.00   pad  0.00/ 0.00 N  act  0.00/ 0.00 N  table  0.75 N  tilt   0.0
+    close                         -0.05   39.54     0.05  -0.26   0.04      -0.04   pad  7.52/ 8.30 N  act  7.51/ 8.30 N  table  0.86 N  tilt   0.1
+    lift                          -0.29   39.54     0.00  -0.00  -0.28      -0.00   pad  7.91/ 7.91 N  act  7.91/ 7.91 N  table  0.00 N  tilt   0.1
+    transit                       -6.01   39.54     0.17  -0.38  -0.25      -0.00   pad  7.94/ 7.88 N  act  8.00/ 7.82 N  table  0.00 N  tilt   0.6
+    place_descend  <-- TIMEOUT    -7.81   39.54     0.16   0.03   3.16       0.01   pad  7.91/ 7.90 N  act  7.91/ 7.90 N  table 10.10 N  tilt   0.0
+    place_descend settle samples (t, cmd_z, tcp_z, cube_z [mm], yaw_err deg):
+      t= 4.94  cmd 149.74  tcp 149.70  cube 143.40  yaw_err  -0.00
+      t= 5.26  cmd 125.75  tcp 129.83  cube 118.87  yaw_err  -0.00
+      t= 5.58  cmd  59.46  tcp  64.77  cube  53.79  yaw_err  -0.00
+      t= 5.90  cmd  24.99  tcp  30.36  cube  19.57  yaw_err   0.00
+      t= 6.22  cmd  24.51  tcp  29.37  cube  19.61  yaw_err   0.01
+      t= 6.54  cmd  24.51  tcp  28.88  cube  19.69  yaw_err   0.01
+      t= 6.86  cmd  24.51  tcp  28.42  cube  19.76  yaw_err   0.01
+      t= 7.18  cmd  24.51  tcp  28.01  cube  19.81  yaw_err   0.01
+    final: z_err 0.75 mm  tilt 0.04 deg  xy_err 2.0 mm
+
+=== seed 38  OK  
+    mass 76.6 g  mu 0.62  size 41.3 mm  perc_xy_err 1.5 mm
+    phase                        dz(mm)   width   tcp_err x / y / z (mm)    yaw_err(deg)   forces on cube (normal, N) / cube tilt (deg)
+    approach                    -129.55   71.13     0.02   0.61   0.11       0.01   pad  0.00/ 0.00 N  act  0.07/ 0.06 N  table  0.75 N  tilt   0.0
+    descend                       -0.04   71.13     0.00   0.00   0.04       0.00   pad  0.00/ 0.00 N  act  0.00/ 0.00 N  table  0.75 N  tilt   0.0
+    close                         -0.03   39.66    -0.01  -0.03   0.02       0.11   pad  7.88/ 7.98 N  act  7.88/ 7.98 N  table  0.80 N  tilt   0.0
+    lift                          -0.86   39.67    -0.00  -0.00  -0.28       0.00   pad  7.93/ 7.93 N  act  7.93/ 7.93 N  table  0.00 N  tilt   0.0
+    transit                       -4.28   39.67    -0.29  -0.56  -0.25       0.00   pad  7.98/ 7.89 N  act  8.06/ 7.81 N  table  0.00 N  tilt   0.4
+    place_descend                 -7.60   39.67    -0.15   0.02   2.98      -0.00   pad  7.92/ 7.94 N  act  7.92/ 7.94 N  table  9.58 N  tilt   0.0
+    release                       -4.02   71.11    -0.01   0.00   0.02      -0.00   pad  0.00/ 0.00 N  act  0.00/ 0.00 N  table  0.75 N  tilt   0.0
+    retreat                     -128.68   71.13    -0.00   0.00  -0.75      -0.00   pad  0.00/ 0.00 N  act  0.00/ 0.00 N  table  0.75 N  tilt   0.0
+    final: z_err 0.11 mm  tilt 0.00 deg  xy_err 1.3 mm
+
+=== seed 106  FAIL  control:tracking_timeout:place_descend
+    mass 78.2 g  mu 0.68  size 39.6 mm  perc_xy_err 5.4 mm
+    phase                        dz(mm)   width   tcp_err x / y / z (mm)    yaw_err(deg)   forces on cube (normal, N) / cube tilt (deg)
+    approach                    -130.34   69.54    -0.31   0.37   0.06      -0.03   pad  0.00/ 0.00 N  act  0.05/ 0.05 N  table  0.77 N  tilt   0.0
+    descend                       -0.09   69.54    -0.00   0.00   0.03      -0.00   pad  0.00/ 0.00 N  act  0.00/ 0.00 N  table  0.77 N  tilt   0.0
+    close                         -0.11   38.02     0.11  -0.18   0.04       0.03   pad  7.28/ 7.92 N  act  7.29/ 7.92 N  table  0.88 N  tilt   0.1
+    lift                          -0.91   38.02     0.00  -0.00  -0.28       0.00   pad  7.60/ 7.60 N  act  7.60/ 7.60 N  table  0.00 N  tilt   0.5
+    transit                      -10.49   38.02     0.33  -0.33  -0.26       0.01   pad  7.64/ 7.57 N  act  7.70/ 7.51 N  table  0.00 N  tilt   2.4
+    place_descend  <-- TIMEOUT    -7.70   38.02    -0.10  -0.16   3.03      -0.00   pad  7.53/ 7.68 N  act  7.53/ 7.68 N  table  9.74 N  tilt   0.1
+    place_descend settle samples (t, cmd_z, tcp_z, cube_z [mm], yaw_err deg):
+      t= 5.02  cmd 149.74  tcp 149.69  cube 138.90  yaw_err   0.00
+      t= 5.34  cmd 125.61  tcp 129.70  cube 109.40  yaw_err   0.00
+      t= 5.66  cmd  58.93  tcp  64.26  cube  43.93  yaw_err   0.00
+      t= 5.98  cmd  24.25  tcp  30.00  cube  18.80  yaw_err   0.01
+      t= 6.30  cmd  23.77  tcp  28.46  cube  18.87  yaw_err   0.00
+      t= 6.62  cmd  23.77  tcp  27.97  cube  18.94  yaw_err   0.00
+      t= 6.94  cmd  23.77  tcp  27.53  cube  19.00  yaw_err   0.00
+      t= 7.26  cmd  23.77  tcp  27.13  cube  19.05  yaw_err   0.00
+    final: z_err 0.73 mm  tilt 0.10 deg  xy_err 3.2 mm
+
+=== seed 166  FAIL  control:tracking_timeout:place_descend
+    mass 77.1 g  mu 1.00  size 37.3 mm  perc_xy_err 4.2 mm
+    phase                        dz(mm)   width   tcp_err x / y / z (mm)    yaw_err(deg)   forces on cube (normal, N) / cube tilt (deg)
+    approach                    -131.54   67.25    -0.22   0.50   0.08       0.02   pad  0.00/ 0.00 N  act  0.05/ 0.05 N  table  0.76 N  tilt   0.0
+    descend                       -0.11   67.25    -0.00   0.00   0.03       0.00   pad  0.00/ 0.00 N  act  0.00/ 0.00 N  table  0.76 N  tilt   0.0
+    close                         -0.13   35.74     0.08   0.28   0.04      -0.07   pad  7.59/ 6.71 N  act  7.59/ 6.71 N  table  0.88 N  tilt   0.1
+    lift                          -0.84   35.74     0.00   0.00  -0.28      -0.00   pad  7.15/ 7.15 N  act  7.15/ 7.15 N  table  0.00 N  tilt   0.2
+    transit                       -6.92   35.92     0.30  -0.58  -0.25      -0.01   pad  7.22/ 7.15 N  act  7.29/ 7.08 N  table  0.00 N  tilt   1.2
+    place_descend  <-- TIMEOUT   -23.53    0.64     0.15   1.62  16.27      -0.23   pad  0.81/48.85 N  act  0.81/ 0.56 N  table 49.52 N  tilt  79.5
+    place_descend settle samples (t, cmd_z, tcp_z, cube_z [mm], yaw_err deg):
+      t= 4.70  cmd 149.74  tcp 149.70  cube 142.45  yaw_err  -0.00
+      t= 5.02  cmd 125.39  tcp 129.53  cube  97.42  yaw_err  -0.00
+      t= 5.34  cmd  58.11  tcp  63.75  cube  17.93  yaw_err  -0.00
+      t= 5.66  cmd  23.11  tcp  39.89  cube  15.25  yaw_err  -0.02
+      t= 5.98  cmd  22.63  tcp  39.21  cube  15.08  yaw_err  -0.14
+      t= 6.30  cmd  22.63  tcp  39.15  cube  15.11  yaw_err  -0.21
+      t= 6.62  cmd  22.63  tcp  39.08  cube  15.17  yaw_err  -0.25
+      t= 6.94  cmd  22.63  tcp  38.99  cube  15.25  yaw_err  -0.26
+    final: z_err 3.29 mm  tilt 79.48 deg  xy_err 19.1 mm
+
+=== seed 5  OK  
+    mass 32.7 g  mu 0.83  size 37.9 mm  perc_xy_err 3.9 mm
+    phase                        dz(mm)   width   tcp_err x / y / z (mm)    yaw_err(deg)   forces on cube (normal, N) / cube tilt (deg)
+    approach                    -131.43   67.73    -0.91   0.64   0.25      -0.01   pad  0.00/ 0.00 N  act  0.07/ 0.07 N  table  0.32 N  tilt   0.0
+    descend                       -0.08   67.73    -0.00   0.00   0.03      -0.00   pad  0.00/ 0.00 N  act  0.00/ 0.00 N  table  0.32 N  tilt   0.0
+    close                         -0.00   35.26     0.01  -0.11  -0.01       0.00   pad  6.90/ 7.19 N  act  6.91/ 7.20 N  table  0.29 N  tilt   0.1
+    lift                          -0.11   35.22     0.00  -0.00  -0.14       0.00   pad  7.04/ 7.04 N  act  7.04/ 7.04 N  table  0.00 N  tilt   0.0
+    transit                       -0.16   35.23     2.20  -1.39  -0.11       0.00   pad  7.08/ 7.01 N  act  7.22/ 6.87 N  table  0.00 N  tilt   0.0
+    place_descend                 -0.26   35.22     0.00  -0.00  -0.07       0.00   pad  7.04/ 7.04 N  act  7.04/ 7.04 N  table  0.00 N  tilt   0.0
+    release                       -4.04   67.71     0.00  -0.00  -0.00       0.00   pad  0.00/ 0.00 N  act  0.01/ 0.01 N  table  0.32 N  tilt   0.0
+    retreat                     -130.42   67.73     0.00  -0.00  -0.76       0.00   pad  0.00/ 0.00 N  act  0.00/ 0.00 N  table  0.32 N  tilt   0.0
+    final: z_err 0.11 mm  tilt 0.00 deg  xy_err 0.9 mm
+
+=== seed 6  OK  
+    mass 79.4 g  mu 0.98  size 38.7 mm  perc_xy_err 3.1 mm
+    phase                        dz(mm)   width   tcp_err x / y / z (mm)    yaw_err(deg)   forces on cube (normal, N) / cube tilt (deg)
+    approach                    -130.87   68.54    -0.05   0.66   0.13      -0.06   pad  0.00/ 0.00 N  act  0.05/ 0.05 N  table  0.78 N  tilt   0.0
+    descend                       -0.04   68.54    -0.00   0.00   0.03      -0.00   pad  0.00/ 0.00 N  act  0.00/ 0.00 N  table  0.78 N  tilt   0.0
+    close                         -0.04   37.15    -0.14   0.14   0.03      -0.04   pad  7.72/ 7.14 N  act  7.72/ 7.14 N  table  0.85 N  tilt   0.1
+    lift                          -0.79   37.16    -0.00   0.00  -0.29      -0.00   pad  7.43/ 7.43 N  act  7.43/ 7.43 N  table  0.00 N  tilt   0.2
+    transit                       -6.03   37.16    -0.17  -0.80  -0.26       0.00   pad  7.47/ 7.40 N  act  7.53/ 7.33 N  table  0.00 N  tilt   0.3
+    place_descend                 -7.62   37.16     0.01  -0.01   3.00       0.00   pad  7.41/ 7.46 N  act  7.41/ 7.46 N  table  9.65 N  tilt   0.2
+    release                       -4.03   68.53     0.00  -0.00   0.02       0.00   pad  0.00/ 0.00 N  act  0.00/ 0.00 N  table  0.78 N  tilt   0.0
+    retreat                     -129.98   68.54     0.00  -0.00  -0.76       0.00   pad  0.00/ 0.00 N  act  0.00/ 0.00 N  table  0.78 N  tilt   0.0
+    final: z_err 0.11 mm  tilt 0.00 deg  xy_err 2.6 mm

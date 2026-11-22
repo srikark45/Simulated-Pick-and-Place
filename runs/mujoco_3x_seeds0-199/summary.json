@@ -1,0 +1,60 @@
+{
+  "backend": "mujoco",
+  "noise_scale": 3.0,
+  "episodes": 200,
+  "successes": 147,
+  "success_rate": 0.735,
+  "wilson95": [
+    0.6698229773344888,
+    0.7913193998839003
+  ],
+  "failure_modes": {
+    "control:tracking_timeout:place_descend": 13,
+    "placement:unstable": 13,
+    "control:grasp_miss": 12,
+    "control:tracking_timeout:descend": 4,
+    "placement:off_target": 4,
+    "control:slipped:transit": 4,
+    "control:slipped:lift": 3
+  },
+  "perception_xy_err_mm": {
+    "mean": 15.823151714157033,
+    "p95": 30.400298612555073,
+    "max": 46.644317268334184,
+    "n": 200
+  },
+  "perception_yaw_err_deg": {
+    "mean": 1.1888710323705687,
+    "p95": 3.2596213340067566,
+    "max": 6.296259982613012,
+    "n": 200
+  },
+  "perception_size_err_mm": {
+    "mean": 0.16680959075492738,
+    "p95": 0.4147762291999295,
+    "max": 0.6226362141389108,
+    "n": 200
+  },
+  "final_xy_err_mm": {
+    "mean": 34.961015731949395,
+    "p95": 281.85333651847515,
+    "max": 398.70710610557944,
+    "n": 200
+  },
+  "sim_time_s": {
+    "mean": 6.082599999999956,
+    "p95": 7.481999999999927,
+    "max": 8.279999999999912,
+    "n": 200
+  },
+  "wall_time_s": {
+    "mean": 0.06291592605994083,
+    "p95": 0.07573738950304686,
+    "max": 0.09812212502583861,
+    "n": 200
+  },
+  "seeds": [
+    0,
+    199
+  ]
+}
